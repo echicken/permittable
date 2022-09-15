@@ -5,7 +5,6 @@ import Papa from 'papaparse';
 const pmap = {
 	GEO_ID: 'AddressGeoID',
 	PERMIT_NUM: 'Number',
-	REVISION_NUM: 'Revision',
 	PERMIT_TYPE: 'PermitType',
 	STRUCTURE_TYPE: 'StructureType',
 	WORK: 'ShortDescription',
@@ -36,6 +35,7 @@ const CSVImport = props => {
 	const formatPermit = permit => {
 		const estimatedCost = parseFloat(permit.EST_CONST_COST, 10);
 		const jp = {
+			Revision: _parseInt(permit.REVISION_NUM),
 			Applied: new Date(permit.APPLICATION_DATE || 0),
 			Issued: new Date(permit.ISSUED_DATE || 0),
 			Completed: new Date(permit.COMPLETED_DATE || 0),
