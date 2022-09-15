@@ -28,14 +28,19 @@ const CSVImport = props => {
 		};
 	}
 
+	const _parseInt = s => {
+		const n = parseInt(s, 10);
+		return isNaN(n) ? 0 : n;
+	}
+
 	const formatPermit = permit => {
 		const estimatedCost = parseFloat(permit.EST_CONST_COST, 10);
 		const jp = {
 			Applied: new Date(permit.APPLICATION_DATE || 0),
 			Issued: new Date(permit.ISSUED_DATE || 0),
 			Completed: new Date(permit.COMPLETED_DATE || 0),
-			DwellingsCreated: parseInt(permit.DWELLING_UNITS_CREATED || 0, 10),
-			DwellingsLost: parseInt(permit.DWELLING_UNITS_LOST || 0, 10),
+			DwellingsCreated: _parseInt(permit.DWELLING_UNITS_CREATED),
+			DwellingsLost: _parseInt(permit.DWELLING_UNITS_LOST),
 			EstimatedCost: isNaN(estimatedCost) ? 0 : estimatedCost,
 		};
 		for (const p in pmap) {
