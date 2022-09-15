@@ -1,2 +1,2 @@
 # permittable
-City of Toronto building permits explorer
+View building permit info from the City of Toronto's Open Data Catalogue
