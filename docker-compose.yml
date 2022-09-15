@@ -1,0 +1,25 @@
+version: "3"
+
+volumes:
+  postgres_data: {}
+
+services:
+  db:
+    image: postgres:14.1-alpine
+    ports:
+      - "30432:5432"
+    env_file:
+      - permittable.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  web:
+    build: ./
+    ports:
+      - "5000:80"
+    depends_on:
+      - db
+    volumes:
+      - /bin
+      - /obj
+    env_file:
+      - permittable.env
