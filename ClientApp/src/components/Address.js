@@ -34,7 +34,7 @@ const Address = () => {
             const response = await fetch(`/api/permit/address/${geoid}/permits`, { credentials: 'same-origin' });
             const data = await response.json();
             if (data.length) {
-                const p = data.sort((a, b) => a > b ? -1 : 1).map(e => <PermitListGroupItem key={`${e.Number},${e.Revision}`} permit={e} />);
+                const p = data.sort((a, b) => a.Issued > b.Issued ? -1 : 1).map(e => <PermitListGroupItem key={`${e.Number},${e.Revision}`} permit={e} />);
                 setPermits(p);
                 setAddress(data[0].Address.Text);
             }
