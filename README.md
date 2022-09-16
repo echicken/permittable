@@ -1,6 +1,8 @@
 # permittable
 View building permit info from the City of Toronto's Open Data Catalogue
 
+[https://permittable.electronicchicken.com](https://permittable.electronicchicken.com/)
+
 ## Notes
 
 I was originally hosting this on Azure, but the resource group was costing me nearly $9 CAD per day and I was going to burn through my $200 free trial credit in no time. Currently using Docker on a local machine instead, a Dell Optiplex sitting under my desk.
