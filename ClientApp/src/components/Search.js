@@ -53,7 +53,7 @@ const Search = props => {
     }
 
     function handleChange(selected) {
-        if (selected.length) navigate(`/address/${selected[0].GeoID}`);
+        if (selected.length) navigate(`/address/${selected[0].GeoID}`, { state: { address: selected[0] }});
     }
 
     function renderMenuItemChild(option) {
@@ -71,7 +71,9 @@ const Search = props => {
 
     return (
         <>
-            <Map center={center} zoom={11} markers={activeMarker || markers} />
+            <Map center={center} zoom={11}>
+                {activeMarker || markers}
+            </Map>
             <br />
             <AsyncTypeahead
                 id="search-bar"
