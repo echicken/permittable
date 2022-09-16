@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import { Table } from 'reactstrap';
+import { Marker, StreetViewPanorama } from '@react-google-maps/api';
+import Map from './Map';
 
 const PermitListGroupItem = props => {
     return (
@@ -24,6 +26,7 @@ const Address = () => {
     const [ permits, setPermits ] = useState(null);
     const [ address, setAddress ] = useState('');
     const { geoid } = useParams();
+    const location = useLocation();
 
     const fetchPermits = async () => {
         if (permits !== null) return;
@@ -31,7 +34,7 @@ const Address = () => {
             const response = await fetch(`/api/permit/address/${geoid}/permits`, { credentials: 'same-origin' });
             const data = await response.json();
             if (data.length) {
-                const p = data.map(e => <PermitListGroupItem key={e.Number} permit={e} />);
+                const p = data.map(e => <PermitListGroupItem key={`${e.Number},${e.Revision}`} permit={e} />);
                 setPermits(p);
                 setAddress(data[0].Address.Text);
             }
@@ -49,8 +52,27 @@ const Address = () => {
         return <h2>No permits available for this address.</h2>
     }
 
+    const center = { lat: location.state.address.Latitude, lng: location.state.address.Longitude };
+
+    const onPanorama = panorama => {
+        panorama.addListener('links_changed', () => {
+            const _pos = panorama.getPosition();
+            const pos = { lat: _pos.lat(), lng: _pos.lng() };
+            const heading = window.google.maps.geometry.spherical.computeHeading(pos, center);
+            panorama.setPov({
+                heading: heading,
+                pitch: 0,
+                zoom: 1,
+            });
+        });
+    }
+
     return (
         <>
+            <Map center={center} zoom={11}>
+                <Marker position={center} />
+                <StreetViewPanorama position={center} visible={true} onLoad={onPanorama} />
+            </Map>
             <h2>Permits for {address}</h2>
             <Table hover responsive>
                 <thead>
