@@ -51,6 +51,22 @@ public class AddressController : ControllerBase
 		return new JsonResult(results, new JsonSerializerOptions{ PropertyNamingPolicy = null });
 	}
 
+	[HttpGet("by-id/{geoid}")]
+	public async Task<IActionResult> ByGeoId(string geoid)
+	{
+		Address address;
+		address = _context.Addresses.Where(a => a.GeoID.Equals(geoid)).Single();
+		if (address.Latitude == null || address.Longitude == null)
+		{
+			LatLng ll = await _googleMaps.GetLatLng(address);
+			address.Latitude = ll.Latitude;
+			address.Longitude = ll.Longitude;
+			_context.Addresses.Update(address);
+			_context.SaveChanges();
+		}
+		return new JsonResult(address, new JsonSerializerOptions{ PropertyNamingPolicy = null });
+	}
+
 	// Accept a POST batch of address records
 	[HttpPost("batch")]
 	public IActionResult PostMultiple([FromBody] List<Address> addresses)
