@@ -32,13 +32,19 @@ const CSVImport = props => {
 		return isNaN(n) ? 0 : n;
 	}
 
+	const parseDate = d => {
+		const m = d.match(/^(\d{4})(\d{2})(\d{2})\d{6}$/); // Newer CSVs have YYYYMMDD000000
+		if (m !== null) d = `${m[1]}/${m[2]}/${m[3]}`; // Older CSVs have YYYY/MM/DD
+		return d ? new Date(d) : null;
+	}
+
 	const formatPermit = permit => {
 		const estimatedCost = parseFloat(permit.EST_CONST_COST, 10);
 		const jp = {
 			Revision: _parseInt(permit.REVISION_NUM),
-			Applied: new Date(permit.APPLICATION_DATE || 0),
-			Issued: new Date(permit.ISSUED_DATE || 0),
-			Completed: new Date(permit.COMPLETED_DATE || 0),
+			Applied: parseDate(permit.APPLICATION_DATE),
+			Issued: parseDate(permit.ISSUED_DATE),
+			Completed: parseDate(permit.COMPLETED_DATE),
 			DwellingsCreated: _parseInt(permit.DWELLING_UNITS_CREATED),
 			DwellingsLost: _parseInt(permit.DWELLING_UNITS_LOST),
 			EstimatedCost: isNaN(estimatedCost) ? 0 : estimatedCost,
