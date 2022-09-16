@@ -24,5 +24,5 @@ This application was written as a learning exercise, and the initial goal was to
   - Would be nice to keep all markers in place and colorize the active one
     - But this was fraught when using react-google-maps for reasons I don't recall at the moment
 - Give address/permit display a bit more style
-  - Street view of property when in address view? Mmhmm, I like the way you think
+  - ~~Street view of property when in address view? Mmhmm, I like the way you think~~
   - Throw some icons / badges / colour in there somewhere, it's very grey
