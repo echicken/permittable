@@ -35,7 +35,7 @@ const CSVImport = props => {
 	const parseDate = d => {
 		const m = d.match(/^(\d{4})(\d{2})(\d{2})\d{6}$/); // Newer CSVs have YYYYMMDD000000
 		if (m !== null) d = `${m[1]}/${m[2]}/${m[3]}`; // Older CSVs have YYYY/MM/DD
-		return d ? new Date(d) : null;
+		new Date(d || 0);
 	}
 
 	const formatPermit = permit => {
