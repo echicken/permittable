@@ -12,8 +12,8 @@ const PermitListGroupItem = props => {
                     {props.permit.Number}
                 </Link>
             </td>
+            <td>{props.permit.Revision}</td>
             <td>{props.permit.PermitType}</td>
-            <td>{props.permit.Applied}</td>
             <td>{props.permit.Issued}</td>
             <td>{props.permit.Completed}</td>
             <td>{props.permit.ShortDescription}</td>
@@ -34,7 +34,7 @@ const Address = () => {
             const response = await fetch(`/api/permit/address/${geoid}/permits`, { credentials: 'same-origin' });
             const data = await response.json();
             if (data.length) {
-                const p = data.map(e => <PermitListGroupItem key={`${e.Number},${e.Revision}`} permit={e} />);
+                const p = data.sort((a, b) => a > b ? -1 : 1).map(e => <PermitListGroupItem key={`${e.Number},${e.Revision}`} permit={e} />);
                 setPermits(p);
                 setAddress(data[0].Address.Text);
             }
@@ -78,8 +78,8 @@ const Address = () => {
                 <thead>
                     <tr>
                         <th>Number</th>
+                        <th>Revision</th>
                         <th>Type</th>
-                        <th>Applied</th>
                         <th>Issued</th>
                         <th>Completed</th>
                         <th>Description</th>
