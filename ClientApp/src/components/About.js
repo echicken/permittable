@@ -7,7 +7,7 @@ const About = () => {
             <p />
             Data is currently available for building permits that were <em>cleared</em> from <strong>2001</strong> to <strong>2021</strong>.
             <p />
-            <strong>permittable</strong> was created by <a href="https://github.com/echicken">Derek Mullin</a>, mostly as a learning exercise, so expect bugs and oddities. Bug reports and feature requests are welcome on <a href="https://github.com/echicken/permittable">GitHub</a>; please feel free to create an <a href="https://github.com/echicken/permittable/issues">issue</a>.
+            <strong>permittable</strong> was created as a learning exercise, so expect bugs and oddities. Bug reports and feature requests are welcome on <a href="https://github.com/echicken/permittable">GitHub</a>; please feel free to create an <a href="https://github.com/echicken/permittable/issues">issue</a>.
         </>
     );
 }
