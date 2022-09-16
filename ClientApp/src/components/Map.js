@@ -29,7 +29,7 @@ const Map = props => {
 				mapContainerStyle={{ width: '100%', height: '550px' }}
 				center={props.center}
 				zoom={props.zoom}
-				children={props.markers}
+				children={props.children}
 			/>
 		</LoadScript>
 	);
