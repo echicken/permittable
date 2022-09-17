@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { InputGroup, InputGroupText } from 'reactstrap';
 import { Typeahead, withAsync } from 'react-bootstrap-typeahead';
 import { Marker } from '@react-google-maps/api';
 import Map from './Map';
@@ -75,21 +76,26 @@ const Search = props => {
                 {activeMarker || markers}
             </Map>
             <br />
-            <AsyncTypeahead
-                id="search-bar"
-                autoFocus={true}
-                placeholder="eg. 237 Glebemount Avenue"
-                minLength={1}
-                delay={1000}
-                labelKey="Text"
-                highlightOnlyResult={true}
-                isLoading={loading}
-                options={options}
-                onSearch={search}
-                filterBy={() => true}
-                renderMenuItemChildren={renderMenuItemChild}
-                onChange={handleChange}
-            />
+            <InputGroup>
+                <InputGroupText>
+                    Address
+                </InputGroupText>
+                <AsyncTypeahead
+                    id="search-bar"
+                    autoFocus={true}
+                    placeholder="eg. 237 Glebemount Avenue"
+                    minLength={1}
+                    delay={1000}
+                    labelKey="Text"
+                    highlightOnlyResult={true}
+                    isLoading={loading}
+                    options={options}
+                    onSearch={search}
+                    filterBy={() => true}
+                    renderMenuItemChildren={renderMenuItemChild}
+                    onChange={handleChange}
+                />
+            </InputGroup>
         </>
     )
 }
