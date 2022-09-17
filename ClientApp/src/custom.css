@@ -11,6 +11,10 @@ div.row:nth-child(even) {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
+span.sort-button:hover {
+  cursor: pointer;
+}
+
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
