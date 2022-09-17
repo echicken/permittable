@@ -4,7 +4,30 @@ import { Table } from 'reactstrap';
 import { Marker, StreetViewPanorama } from '@react-google-maps/api';
 import Map from './Map';
 
-const PermitListGroupItem = props => {
+const Sorter = props => {
+
+    const sort = dir => {
+        const s = props.data.slice(0).sort((a, b) => {
+            if (a[props.sortBy] < b[props.sortBy]) {
+                return dir === 'ascending' ? -1 : 1;
+            }
+            if (a[props.sortBy] > b[props.sortBy]) {
+                return dir === 'ascending' ? 1: -1;
+            }
+            return 0;
+        });
+        props.setter(s);
+    }
+
+    return (
+        <>
+            <span className="sort-button" onClick={() => sort('ascending')}>▲</span>
+            <span className="sort-button" onClick={() => sort('descending')}>▼</span>
+        </>
+    );
+}
+
+const PermitListItem = props => {
     return (
         <tr>
             <td>
@@ -19,6 +42,11 @@ const PermitListGroupItem = props => {
             <td>{props.permit.ShortDescription}</td>
         </tr>
     );
+}
+
+const PermitList = props => {
+    const list = props.data.map(e => <PermitListItem key={`${e.Number},${e.Revision}`} permit={e} />);
+    return <>{list}</>
 }
 
 const Address = () => {
@@ -37,7 +65,7 @@ const Address = () => {
             const response = await fetch(`/api/permit/address/${geoid}/permits`, { credentials: 'same-origin' });
             const data = await response.json();
             if (data.length) {
-                const p = data.sort((a, b) => a.Issued > b.Issued ? -1 : 1).map(e => <PermitListGroupItem key={`${e.Number},${e.Revision}`} permit={e} />);
+                const p = data.sort((a, b) => a.Issued > b.Issued ? -1 : 1);
                 setPermits(p);
             }
         } catch (err) {
@@ -102,16 +130,16 @@ const Address = () => {
             <Table hover responsive>
                 <thead>
                     <tr>
-                        <th>Number</th>
-                        <th>Revision</th>
-                        <th>Type</th>
-                        <th>Issued</th>
-                        <th>Completed</th>
-                        <th>Description</th>
+                        <th>Number <Sorter data={permits} sortBy="Number" setter={setPermits} /></th>
+                        <th>Revision <Sorter data={permits} sortBy="Revision" setter={setPermits} /></th>
+                        <th>Type <Sorter data={permits} sortBy="PermitType" setter={setPermits} /></th>
+                        <th>Issued <Sorter data={permits} sortBy="Issued" setter={setPermits} /></th>
+                        <th>Completed <Sorter data={permits} sortBy="Completed" setter={setPermits} /></th>
+                        <th>Description <Sorter data={permits} sortBy="ShortDescription" setter={setPermits} /></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {permits}
+                    <PermitList data={permits} />
                 </tbody>
             </Table>
         </>
