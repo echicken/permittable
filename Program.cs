@@ -27,10 +27,10 @@ using (var scope = app.Services.CreateScope())
 	context.Database.Migrate();
 }
 
-app.UsePathBase("/api");
 app.UseHttpsRedirection();
-app.UseStaticFiles();
 app.UseAuthorizationMiddleware();
+app.UseStaticFiles();
+app.UsePathBase("/api");
 app.UseRouting();
 app.MapControllers();
 app.MapControllerRoute(
