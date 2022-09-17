@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useParams, useLocation } from 'react-router-dom';
 import { Table } from 'reactstrap';
-import { Marker, StreetViewPanorama } from '@react-google-maps/api';
+import { Marker, StreetViewPanorama, StreetViewService } from '@react-google-maps/api';
 import Map from './Map';
 
 const Sorter = props => {
@@ -55,6 +55,8 @@ const Address = () => {
     const [ loadingPermits, setLoadingPermits ] = useState(false);
     const [ address, setAddress ] = useState(null);
     const [ loadingAddress, setLoadingAddress ] = useState(false);
+    const [ pano, setPano ] = useState(undefined);
+    const [ panos, setPanos ] = useState([]);
 
     const { geoid } = useParams();
     const location = useLocation();
@@ -120,11 +122,36 @@ const Address = () => {
 
     const center = { lat: address.Latitude, lng: address.Longitude };
 
+    const onService = svs => {
+        svs.getPanorama(
+            { location: center, radius: 50 },
+            (data, status) => {
+                if (status !== 'OK') return;
+                console.debug(data.time);
+                setPanos(data.time);
+
+                // On mouseover of item in PermitList, find best match in 'panos' (panos[n].Jo) for the issue(?) date of the permit
+                // and then update 'pano' (setPano) to panos[n].pano to display that historical image.
+
+                // This will do a slideshow of all available panos for our location:
+
+                // let n = 0;
+                // setInterval(() => {
+                //     setPano(data.time[n].pano);
+                //     n++;
+                //     if (n >= data.time.length) n = 0;
+                // }, 5000);
+
+            }
+        );
+    }
+
     return (
         <>
             <Map center={center} zoom={11}>
                 <Marker position={center} />
-                <StreetViewPanorama position={center} visible={true} onLoad={onPanorama} />
+                <StreetViewPanorama options={{ imageDateControl: true }} pano={pano} position={center} visible={true} onLoad={onPanorama} />
+                <StreetViewService onLoad={onService} />
             </Map>
             <h2>Permits for {address.Text}</h2>
             <Table hover responsive>
