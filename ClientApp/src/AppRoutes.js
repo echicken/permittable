@@ -18,7 +18,7 @@ const AppRoutes = [
 		element: <CSVImport />,
 	},
 	{
-		path: '/address/:geoid',
+		path: '/view-address/:geoid',
 		element: <Address />,
 	},
 	{

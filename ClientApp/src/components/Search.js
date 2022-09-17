@@ -53,7 +53,7 @@ const Search = props => {
     }
 
     function handleChange(selected) {
-        if (selected.length) navigate(`/address/${selected[0].GeoID}`, { state: { address: selected[0] }});
+        if (selected.length) navigate(`/view-address/${selected[0].GeoID}`, { state: { address: selected[0] }});
     }
 
     function renderMenuItemChild(option) {
