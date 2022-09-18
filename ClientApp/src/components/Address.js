@@ -180,7 +180,18 @@ const Address = () => {
 	return (<>
 		<Map center={center} zoom={11}>
 			<Marker position={center} />
-			<StreetViewPanorama options={{ imageDateControl: true }} pano={panos[panoIdx]?.pano} position={center} visible={true} onLoad={onPanorama} />
+			<StreetViewPanorama
+				options={{
+					addressControl: true,
+					clickToGo: false,
+					disableDefaultUI: true,
+					imageDateControl: true,
+				}}
+				pano={panos[panoIdx]?.pano}
+				position={center}
+				visible={true}
+				onLoad={onPanorama}
+			/>
 			<StreetViewService onLoad={onService} />
 		</Map>
 		<PanoRanger panos={panos} panoIdx={panoIdx} setPanoIdx={setPanoIdx} />
