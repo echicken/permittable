@@ -67,7 +67,7 @@ const Address = () => {
 	}
 
 	const onPermitHover = permit => {
-		const pid = new Date(permit.Issued);
+		const pid = new Date(permit.Issued ?? permit.Applied ?? permit.Completed);
 		let closestDiff = Infinity;
 		let closestPano = undefined;
 		for (let i = 0; i < panos.length; i++) {
