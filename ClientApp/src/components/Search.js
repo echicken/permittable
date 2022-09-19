@@ -67,7 +67,6 @@ const Search = props => {
 
     function setMapBounds(map) {
         const bounds = new window.google.maps.LatLngBounds({ lat: 43.581005, lng: -79.639268 }, { lat: 43.855466, lng: -79.115246 });
-        console.debug(bounds);
         map.fitBounds(bounds, 0);
     };
 
