@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
-import { Input } from 'reactstrap';
+import { Container, Row, Col, Input } from 'reactstrap';
 import { Marker, StreetViewPanorama, StreetViewService } from '@react-google-maps/api';
 import Map from './Map';
 import PermitTable from './PermitTable';
@@ -8,15 +8,27 @@ import PermitTable from './PermitTable';
 const PanoRanger = props => {
 	if (!props.panos || props.panos.length < 2) return;
 	return (
-		<Input
-			type="range"
-			name="range"
-			min="0"
-			max={props.panos.length - 1}
-			value={props.panoIdx}
-			step={1}
-			onChange={evt => props.setPanoIdx(evt.target.value)}
-		/>
+		<Container>
+			<Row>
+				<Col className="col-1">
+					{props.panos[0].Jo.getFullYear()}
+				</Col>
+				<Col className="col-10">
+					<Input
+						type="range"
+						name="range"
+						min="0"
+						max={props.panos.length - 1}
+						value={props.panoIdx}
+						step={1}
+						onChange={evt => props.setPanoIdx(evt.target.value)}
+					/>
+				</Col>
+				<Col className="col-1 text-end">
+					{props.panos[props.panos.length - 1].Jo.getFullYear()}
+				</Col>
+			</Row>
+		</Container>
 	);
 }
 
