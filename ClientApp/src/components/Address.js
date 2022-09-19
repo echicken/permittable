@@ -52,7 +52,7 @@ const Address = () => {
 			panorama.setPov({
 				heading: heading,
 				pitch: 0,
-				zoom: 1,
+				zoom: 0,
 			});
 		});
 	}
@@ -112,6 +112,7 @@ const Address = () => {
 				position={center}
 				visible={true}
 				onLoad={onPanorama}
+				zoom={0}
 			/>
 			<StreetViewService onLoad={onService} />
 		</Map>
