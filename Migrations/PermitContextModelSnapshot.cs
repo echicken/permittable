@@ -58,10 +58,10 @@ namespace permittable.Migrations
                     b.Property<string>("AddressGeoID")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("Applied")
+                    b.Property<DateTime?>("Applied")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("Completed")
+                    b.Property<DateTime?>("Completed")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CurrentUse")
@@ -76,7 +76,7 @@ namespace permittable.Migrations
                     b.Property<float>("EstimatedCost")
                         .HasColumnType("real");
 
-                    b.Property<DateTime>("Issued")
+                    b.Property<DateTime?>("Issued")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("LongDescription")
