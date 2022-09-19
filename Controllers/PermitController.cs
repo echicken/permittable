@@ -55,11 +55,16 @@ public class PermitController : ControllerBase
 	{
 		foreach (Permit permit in permits)
 		{
-			if (ModelState.IsValid && !_context.Permits.Any(p => p.Number == permit.Number && p.Revision == permit.Revision))
+			if (!ModelState.IsValid) continue;
+			if (!_context.Permits.Any(p => p.Number == permit.Number && p.Revision == permit.Revision))
 			{
 				_context.Permits.Add(permit);
-				_context.SaveChanges();
 			}
+			else
+			{
+				_context.Permits.Update(permit);
+			}
+			_context.SaveChanges();
 		}
 		return Ok();
 	}
