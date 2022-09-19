@@ -26,9 +26,10 @@ const Map = props => {
 	return (
 		<LoadScript googleMapsApiKey={key}>
 			<GoogleMap
-				mapContainerStyle={{ width: '100%', height: '550px' }}
+				mapContainerStyle={{ width: '100%', height: '400px' }}
 				center={props.center}
-				zoom={props.zoom}
+				options={props.options}
+				onLoad={props.onLoad}
 				children={props.children}
 			/>
 		</LoadScript>

@@ -65,14 +65,22 @@ const Search = props => {
         );
     }
 
+    function setMapBounds(map) {
+        const bounds = new window.google.maps.LatLngBounds({ lat: 43.581005, lng: -79.639268 }, { lat: 43.855466, lng: -79.115246 });
+        console.debug(bounds);
+        map.fitBounds(bounds, 0);
+    };
+
     if (!center) {
         if (!loadingCenter) fetchCenter();
         return;
     }
 
+    // console.log(center);
+
     return (
         <>
-            <Map center={center} zoom={11}>
+            <Map center={center} onLoad={setMapBounds}>
                 {activeMarker || markers}
             </Map>
             <br />
