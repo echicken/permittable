@@ -9,7 +9,7 @@ namespace permittable.PostgreSQL;
 public class DateConverter : ValueConverter<DateTime, DateTime>
 {
 	public DateConverter() : base(
-		v => DateTime.SpecifyKind(v, DateTimeKind.Utc),
+		v => v == null ? v : DateTime.SpecifyKind(v, DateTimeKind.Utc),
 		v => v
 	){}
 }

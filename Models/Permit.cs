@@ -7,9 +7,9 @@ public class Permit
     public string? Number { get; set; }
     public string? AddressGeoID { get; set; }
     public Address? Address { get; set; }
-    public DateTime Applied { get; set; }
-    public DateTime Issued { get; set; }
-    public DateTime Completed { get; set; }
+    public DateTime? Applied { get; set; }
+    public DateTime? Issued { get; set; }
+    public DateTime? Completed { get; set; }
     public int Revision {get; set; }
     public string? PermitType { get; set; }
     public string? StructureType { get; set; }
