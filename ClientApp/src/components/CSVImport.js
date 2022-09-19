@@ -54,7 +54,6 @@ const CSVImport = props => {
 			if (permit[p] === undefined) continue;
 			jp[pmap[p]] = permit[p];
 		}
-		console.debug(permit, jp);
 		return jp;
 	}
 
