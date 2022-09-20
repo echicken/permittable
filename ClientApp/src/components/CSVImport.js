@@ -121,6 +121,7 @@ const CSVImport = props => {
 							parser.abort();
 							return;
 						}
+						console.debug(`${keys.length} permits, ${addresses.length} addresses posted so far ...`);
 					}
 				}
 				parser.resume();
