@@ -3,6 +3,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using permittable.Lib;
 using permittable.PostgreSQL;
@@ -46,9 +47,15 @@ public class AddressController : ControllerBase
 			address.Latitude = ll.Latitude;
 			address.Longitude = ll.Longitude;
 			_context.Addresses.Update(address);
-			_context.SaveChanges();
 		}
-		return new JsonResult(results, new JsonSerializerOptions{ PropertyNamingPolicy = null });
+		_context.SaveChanges();
+		return new JsonResult(
+			results,
+			new JsonSerializerOptions{
+				PropertyNamingPolicy = null,
+				ReferenceHandler = ReferenceHandler.IgnoreCycles,
+			}
+		);
 	}
 
 	[HttpGet("by-id/{geoid}")]
@@ -64,7 +71,12 @@ public class AddressController : ControllerBase
 			_context.Addresses.Update(address);
 			_context.SaveChanges();
 		}
-		return new JsonResult(address, new JsonSerializerOptions{ PropertyNamingPolicy = null });
+		return new JsonResult(
+			address, new JsonSerializerOptions{
+				PropertyNamingPolicy = null,
+				ReferenceHandler = ReferenceHandler.IgnoreCycles,
+			}
+		);
 	}
 
 	// Accept a POST batch of address records
@@ -76,9 +88,9 @@ public class AddressController : ControllerBase
 			if (ModelState.IsValid && !_context.Addresses.Any(a => a.GeoID == address.GeoID))
 			{
 				_context.Addresses.Add(address);
-				_context.SaveChanges();
 			}
 		}
+		_context.SaveChanges();
 		return Ok();
 	}
 

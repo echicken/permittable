@@ -45,7 +45,10 @@ public class PermitController : ControllerBase
 		Address a = _context.Addresses.Where(a => a.GeoID == p.AddressGeoID).Single();
 		return new JsonResult(
 			new { Address = a, Permit = p },
-			new JsonSerializerOptions{ PropertyNamingPolicy = null }
+			new JsonSerializerOptions{
+				PropertyNamingPolicy = null,
+				ReferenceHandler = ReferenceHandler.IgnoreCycles
+			}
 		);
 	}
 
@@ -64,8 +67,8 @@ public class PermitController : ControllerBase
 			{
 				_context.Permits.Update(permit);
 			}
-			_context.SaveChanges();
 		}
+		_context.SaveChanges();
 		return Ok();
 	}
 
