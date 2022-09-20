@@ -18,23 +18,27 @@ const PermitRow = props => {
 const Permit = () => {
 
 	const [ permit, setPermit ] = useState(null);
+	const [ loadingPermit, setLoadingPermit ] = useState(false);
 	const { permitNumber, permitRevision } = useParams();
 	const location = useLocation();
 
 	const fetchPermit = async (num, rev) => {
+		setLoadingPermit(true);
 		try {
 			const response = await fetch(`/api/permit/${num}/${rev}`, { credentials: 'same-origin' });
 			const data = await response.json();
 			setPermit(data);
 		} catch (err) {
 			console.log('Error fetching permit', err);
+		} finally {
+			setLoadingPermit(false);
 		}
 	}
 
 	if (!permit) {
 		if (location.state) {
 			setPermit(location.state);
-		} else {
+		} else if (!loadingPermit) {
 			fetchPermit(permitNumber, permitRevision);
 		}
 		return;

@@ -29,13 +29,10 @@ public class PermitController : ControllerBase
 	public IActionResult PermitsByAddress(string address)
 	{
 		Address addr = _context.Addresses.Include(a => a.Permits).Where(a => a.GeoID == address).Single();
-		return new JsonResult(
-			addr.Permits.ToList(),
-			new JsonSerializerOptions{
-				PropertyNamingPolicy = null,
-				ReferenceHandler = ReferenceHandler.IgnoreCycles
-			}
-		);
+		return new JsonResult(addr.Permits.ToList(), new JsonSerializerOptions{
+			PropertyNamingPolicy = null,
+			ReferenceHandler = ReferenceHandler.IgnoreCycles
+		});
 	}
 
 	[HttpGet("{number}/{revision}")]
@@ -43,13 +40,10 @@ public class PermitController : ControllerBase
 	{
 		Permit p = _context.Permits.Where(p => p.Number == number && p.Revision == revision).Single();
 		Address a = _context.Addresses.Where(a => a.GeoID == p.AddressGeoID).Single();
-		return new JsonResult(
-			new { Address = a, Permit = p },
-			new JsonSerializerOptions{
-				PropertyNamingPolicy = null,
-				ReferenceHandler = ReferenceHandler.IgnoreCycles
-			}
-		);
+		return new JsonResult(p, new JsonSerializerOptions{
+			PropertyNamingPolicy = null,
+			ReferenceHandler = ReferenceHandler.IgnoreCycles
+		});
 	}
 
 	// Accept a POST batch of permit records
