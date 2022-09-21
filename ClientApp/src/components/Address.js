@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { Marker, StreetViewPanorama, StreetViewService } from '@react-google-maps/api';
+import Loader from './Loader';
 import Map from './Map';
 import PanoRanger from './PanoRanger';
 import PermitTable from './PermitTable';
@@ -10,7 +11,6 @@ const Address = () => {
 	const [ permits, setPermits ] = useState([]);
 	const [ loadingPermits, setLoadingPermits ] = useState(false);
 	const [ address, setAddress ] = useState(null);
-	const [ loadingAddress, setLoadingAddress ] = useState(false);
 	const [ panoIdx, setPanoIdx ] = useState(0);
 	const [ panos, setPanos ] = useState([]);
 
@@ -36,18 +36,6 @@ const Address = () => {
 				break;
 			}
 		}
-	}
-
-	const fetchAddress = async () => {
-		setLoadingAddress(true);
-		try {
-			const response = await fetch(`/api/address/by-id/${geoid}`, { credentials: 'same-origin' });
-			const data = await response.json();
-			setAddress(data);
-		} catch (err) {
-			console.log('Error fetching address data', err);
-		}
-		setLoadingAddress(false);
 	}
 
 	const onPanorama = panorama => {
@@ -90,14 +78,8 @@ const Address = () => {
 		return <h2>Loading ...</h2>;
 	}
 
-	if (address === null) {
-		if (location.state?.address !== undefined) {
-			setAddress(location.state.address);
-			return;
-		} else {
-			if (!loadingAddress) fetchAddress();
-			return <h2>Loading ...</h2>
-		}
+	if (!address) {
+		return <Loader path={`/api/address/by-id/${geoid}`} data={location.state?.address || address} onData={setAddress} />
 	}
 
 	if (!permits.length) return <h2>No permits available for this address.</h2>;
