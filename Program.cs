@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<PermitContext>(options => options.UseNpgsql(Environment.GetEnvironmentVariable("DB_CONNECTION_STRING")));
 builder.Services.AddScoped<Maps>();
+builder.Services.AddScoped<Stats>();
 
 var app = builder.Build();
 
