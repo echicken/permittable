@@ -7,7 +7,7 @@ import PermitTable from './PermitTable';
 
 const Address = () => {
 
-	const [ permits, setPermits ] = useState(null);
+	const [ permits, setPermits ] = useState([]);
 	const [ loadingPermits, setLoadingPermits ] = useState(false);
 	const [ address, setAddress ] = useState(null);
 	const [ loadingAddress, setLoadingAddress ] = useState(false);
@@ -19,17 +19,23 @@ const Address = () => {
 
 	const fetchPermits = async () => {
 		setLoadingPermits(true);
-		try {
-			const response = await fetch(`/api/permit/address/${geoid}/permits`, { credentials: 'same-origin' });
-			const data = await response.json();
-			if (data.length) {
-				const p = data.sort((a, b) => a.Issued > b.Issued ? -1 : 1);
-				setPermits(p);
+		let pstore = [];
+		for (let page = 0;; page++) {
+			try {
+				const response = await fetch(`/api/permit/address/${geoid}/permits/${page}`, { credentials: 'same-origin' });
+				const data = await response.json();
+				if (data.length) {
+					pstore = pstore.concat(data);
+				} else {
+					setPermits(pstore.sort((a, b) => a.Issued < b.Issued ? -1 : 1));
+					setLoadingPermits(false);
+					break;
+				}
+			} catch (err) {
+				console.log('Error fetching address data', err);
+				break;
 			}
-		} catch (err) {
-			console.log('Error fetching address data', err);
 		}
-		setLoadingPermits(false);
 	}
 
 	const fetchAddress = async () => {
@@ -79,7 +85,7 @@ const Address = () => {
 		setPanoIdx(closestPano);
 	}
 
-	if (permits === null) {
+	if (!permits.length || loadingPermits) {
 		if (!loadingPermits) fetchPermits();
 		return <h2>Loading ...</h2>;
 	}
