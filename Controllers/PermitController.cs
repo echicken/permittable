@@ -25,11 +25,11 @@ public class PermitController : ControllerBase
 	}
 
 	// Find permits for an address
-	[HttpGet("address/{address}/permits")]
-	public IActionResult PermitsByAddress(string address)
+	[HttpGet("address/{address}/permits/{page?}")]
+	public IActionResult PermitsByAddress(string address, int page)
 	{
-		Address addr = _context.Addresses.Include(a => a.Permits).Where(a => a.GeoID == address).Single();
-		return new JsonResult(addr.Permits.ToList(), new JsonSerializerOptions{
+		List<Permit> permits = _context.Permits.Where(p => p.AddressGeoID == address).OrderBy(p => p.Number).ThenBy(p => p.Revision).ThenBy(p => p.Applied).Skip(page * 100).Take(100).ToList();
+		return new JsonResult(permits, new JsonSerializerOptions{
 			PropertyNamingPolicy = null,
 			ReferenceHandler = ReferenceHandler.IgnoreCycles
 		});
