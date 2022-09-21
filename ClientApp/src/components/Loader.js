@@ -22,11 +22,11 @@ const Loader = props => {
 	if (props.data && !loaded) {
 		props.onData(props.data);
 		setLoaded(true);
+        return;
 	} else if (!props.data && !loading) {
 		fetchData();
+        return <h2>Loading ...</h2>;
 	}
-
-	return;
 
 }
 
