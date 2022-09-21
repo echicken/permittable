@@ -18,6 +18,7 @@ const PermitRow = props => {
 const Permit = () => {
 
 	const [ permit, setPermit ] = useState(null);
+	const [ address, setAddress ] = useState(null);
 	const [ loadingPermit, setLoadingPermit ] = useState(false);
 	const { permitNumber, permitRevision } = useParams();
 	const location = useLocation();
@@ -28,6 +29,7 @@ const Permit = () => {
 			const response = await fetch(`/api/permit/${num}/${rev}`, { credentials: 'same-origin' });
 			const data = await response.json();
 			setPermit(data);
+			setAddress(data.Address.Text);
 		} catch (err) {
 			console.log('Error fetching permit', err);
 		} finally {
@@ -37,7 +39,8 @@ const Permit = () => {
 
 	if (!permit) {
 		if (location.state) {
-			setPermit(location.state);
+			setPermit(location.state.permit);
+			setAddress(location.state.address.Text);
 		} else if (!loadingPermit) {
 			fetchPermit(permitNumber, permitRevision);
 		}
@@ -58,7 +61,7 @@ const Permit = () => {
 			<PermitRow label="Applied" data={permit.Applied} />
 			<PermitRow label="Issued" data={permit.Issued} />
 			<PermitRow label="Completed" data={permit.Completed} />
-			<PermitRow label="Address" data={permit.Address.Text} />
+			<PermitRow label="Address" data={address} />
 			<PermitRow label="Structure Type" data={permit.StructureType} />
 			<PermitRow label="Current Use" data={permit.CurrentUse} />
 			<PermitRow label="Proposed Use" data={permit.ProposedUse} />
