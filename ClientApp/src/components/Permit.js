@@ -15,57 +15,53 @@ const PermitRow = props => {
 	)
 }
 
+const Loader = props => {
+
+	const [ loading, setLoading ] = useState(false);
+	const [ loaded, setLoaded ] = useState(false);
+
+	const fetchData = async () => {
+		setLoading(true);
+		try {
+			const response = await fetch(props.path, { credentials: 'same-origin'});
+			const data = await response.json();
+			props.onData(data);
+		} catch (err) {
+			console.error(`Error loading data from ${props.path}`, err);
+			if (typeof props.onError === 'function') props.onError(err);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	if (props.data && !loaded) {
+		props.onData(props.data);
+		setLoaded(true);
+	} else if (!props.data && !loading) {
+		fetchData();
+	}
+
+	return;
+
+}
+
 const Permit = () => {
 
 	const [ permit, setPermit ] = useState(null);
-	const [ loadingPermit, setLoadingPermit ] = useState(false);
 	const [ address, setAddress ] = useState(null);
-	const [ loadingAddress, setLoadingAddress ] = useState(false);
 	const { permitNumber, permitRevision } = useParams();
 	const location = useLocation();
 
-	const fetchPermit = async (num, rev) => {
-		setLoadingPermit(true);
-		try {
-			const response = await fetch(`/api/permit/${num}/${rev}`, { credentials: 'same-origin' });
-			const data = await response.json();
-			setPermit(data);
-			setAddress(data.Address.Text);
-		} catch (err) {
-			console.log('Error fetching permit', err);
-		} finally {
-			setLoadingPermit(false);
-		}
-	}
-
-	const fetchAddress = async id => {
-		setLoadingAddress(true);
-		try {
-			const response = await fetch(`/api/address/by-id/${id}`, { credentials: 'same-origin' });
-			const data = await response.json();
-			setAddress(data.Text);
-		} catch (err) {
-			console.log('Error fetching address', err);
-		} finally {
-			setLoadingAddress(false);
-		}
-	}
-
 	if (!permit) {
-		if (location.state?.permit) {
-			setPermit(location.state.permit);
-		} else if (!loadingPermit) {
-			fetchPermit(permitNumber, permitRevision);
+		const od = d => {
+			setPermit(d);
+			setAddress(d.Address);
 		}
-		return;
+		return <Loader path={`/api/permit/${permitNumber}/${permitRevision}`} data={location.state?.permit || permit} onData={od} />;
 	}
 
 	if (!address) {
-		if (location.state?.address) {
-			setAddress(location.state.address);
-		} else if (!loadingAddress) {
-			fetchAddress(permit.AddressGeoID);
-		}
+		return <Loader path={`/api/address/by-id/${permit.AddressGeoID}`} data={location.state?.address || address} onData={setAddress} />
 	}
 
 	return(
@@ -82,7 +78,7 @@ const Permit = () => {
 			<PermitRow label="Applied" data={permit.Applied} />
 			<PermitRow label="Issued" data={permit.Issued} />
 			<PermitRow label="Completed" data={permit.Completed} />
-			<PermitRow label="Address" data={address} />
+			<PermitRow label="Address" data={address.Text} />
 			<PermitRow label="Structure Type" data={permit.StructureType} />
 			<PermitRow label="Current Use" data={permit.CurrentUse} />
 			<PermitRow label="Proposed Use" data={permit.ProposedUse} />
