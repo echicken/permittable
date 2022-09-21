@@ -3,30 +3,37 @@ import React from 'react';
 const ASCENDING = Symbol.for('SORT ASCENDING');
 const DESCENDING = Symbol.for('SORT DESCENDING');
 
-const Sorter = props => {
-
-	const sort = (dir, data, key) => {
-		const s = data.sort((a, b) => {
-			if (dir === ASCENDING) {
-				if (a[key] < b[key]) {
-					return -1;
-				} else if (a[key] > b[key]) {
-					return 1;
-				}
-				return 0;
-			}
-			if (a[key] < b[key]) {
-				return 1;
-			} else if (a[key] > b[key]) {
+const sort = (data, key, dir, parser) => {
+	const s = data.sort((a, b) => {
+		let _a = a[key];
+		let _b = b[key];
+		if (typeof parser === 'function') {
+			_a = parser(_a);
+			_b = parser(_b);
+		}
+		if (dir === ASCENDING) {
+			if (_a < _b) {
 				return -1;
+			} else if (_a > _b) {
+				return 1;
 			}
 			return 0;
-		});
-		props.setter(s);
-	}
+		}
+		if (_a < _b) {
+			return 1;
+		} else if (_a > _b) {
+			return -1;
+		}
+		return 0;
+	});
+	return s;
+}
+
+const Sorter = props => {
 
 	const oc = evt => {
-		(props.sortFunction || sort)(Symbol.for(evt.target.dataset.sortdir), props.data.slice(0), props.sortBy);
+		const sorted = (props.sortFunction || sort)(props.data.slice(0), props.sortBy, Symbol.for(evt.target.dataset.sortdir), props.parser);
+		props.setter(sorted);
 	}
 
 	return (<>

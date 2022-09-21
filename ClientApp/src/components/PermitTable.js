@@ -7,7 +7,7 @@ const PermitListItem = props => {
 	return (
 		<tr onMouseOver={() => props.onHover(props.permit)}>
 			<td>
-				<Link to={`/view-permit/${props.permit.Number}/${props.permit.Revision}`} state={props.permit}>
+				<Link to={`/view-permit/${props.permit.Number}/${props.permit.Revision}`} state={{ address: props.address, permit: props.permit }}>
 					{props.permit.Number}
 				</Link>
 			</td>
@@ -21,7 +21,16 @@ const PermitListItem = props => {
 }
 
 const PermitList = props => {
-	const list = props.data.map(e => <PermitListItem key={`${e.Number},${e.Revision}`} permit={e} onHover={props.onPermitHover} />);
+	const list = props.data.map(e => {
+		return (
+			<PermitListItem
+				key={`${e.Number},${e.Revision}`}
+				address={props.address}
+				permit={e}
+				onHover={props.onPermitHover}
+			/>
+		);
+	});
 	return <>{list}</>;
 }
 
@@ -34,13 +43,13 @@ const PermitTable = props => {
 					<th>Number <Sorter data={props.permits} sortBy="Number" setter={props.setPermits} /></th>
 					<th>Revision <Sorter data={props.permits} sortBy="Revision" setter={props.setPermits} /></th>
 					<th>Type <Sorter data={props.permits} sortBy="PermitType" setter={props.setPermits} /></th>
-					<th>Issued <Sorter data={props.permits} sortBy="Issued" setter={props.setPermits} /></th>
-					<th>Completed <Sorter data={props.permits} sortBy="Completed" setter={props.setPermits} /></th>
+					<th>Issued <Sorter data={props.permits} sortBy="Issued" setter={props.setPermits} parser={v => new Date(v)} /></th>
+					<th>Completed <Sorter data={props.permits} sortBy="Completed" setter={props.setPermits} parser={v => new Date(v)} /></th>
 					<th>Description <Sorter data={props.permits} sortBy="ShortDescription" setter={props.setPermits} /></th>
 				</tr>
 			</thead>
 			<tbody>
-				<PermitList data={props.permits} onPermitHover={props.onPermitHover} />
+				<PermitList data={props.permits} address={props.address} onPermitHover={props.onPermitHover} />
 			</tbody>
 		</Table>
 	</>);
