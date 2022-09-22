@@ -8,7 +8,7 @@ const Address = () => {
 
 	const [ permits, setPermits ] = useState(null);
 	const [ address, setAddress ] = useState(null);
-	const [ permitDate, setPermitDate ] = useState();
+	const [ permitDate, setPermitDate ] = useState(new Date());
 
 	const { geoid } = useParams();
 	const location = useLocation();
