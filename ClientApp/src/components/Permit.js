@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
-import { Container, Row, Col } from 'reactstrap';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { Breadcrumb, BreadcrumbItem, Container, Row, Col } from 'reactstrap';
 import Loader from './Loader';
 
 const PermitRow = props => {
@@ -22,7 +22,21 @@ const PermitContainer = props => {
 		<Container>
 			<Row>
 				<Col>
-					<h2>Permit {permit.Number} revision {permit.Revision}</h2>
+					<Breadcrumb>
+						<BreadcrumbItem>
+							<Link to={`/view-address/${address.GeoID}`} state={{ address: props.address }}>
+								{address.Text}
+							</Link>
+						</BreadcrumbItem>
+						<BreadcrumbItem active>
+							{permit.Number} {permit.Revision}
+						</BreadcrumbItem>
+					</Breadcrumb>
+				</Col>
+			</Row>
+			<Row>
+				<Col>
+					<h3>Permit {permit.Number} revision {permit.Revision}</h3>
 				</Col>
 			</Row>
 			<PermitRow label="Status" data={permit.Status} />
