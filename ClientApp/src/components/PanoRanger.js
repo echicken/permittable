@@ -3,8 +3,8 @@ import { Container, Row, Col, Input } from 'reactstrap';
 
 const PanoRanger = props => {
 	if (!props.panos || props.panos.length < 2) return;
-	const fd = (props.panos[0].Jo || props.panos[0].Ko)?.getFullYear();
-	const ld = (props.panos[props.panos.length - 1].Jo || props.panos[props.panos.length - 1].Ko)?.getFullYear();
+	const fd = props.panos[0].Jo?.getFullYear() || props.panos[0].Ko?.getFullYear();
+	const ld = props.panos[props.panos.length - 1].Jo?.getFullYear() || props.panos[props.panos.length - 1].Ko?.getFullYear();
 	return (
 		<Container>
 			<Row>

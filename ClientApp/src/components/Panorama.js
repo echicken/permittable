@@ -1,16 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StreetViewPanorama, StreetViewService } from '@react-google-maps/api';
 import Map from './Map';
 import PanoRanger from './PanoRanger';
 
 const Panorama = props => {
 
+	const [ center, setCenter ] = useState({ lat: 0, lng: 0 });
+	const [ pano, setPano ] = useState();
 	const [ panos, setPanos ] = useState([]);
 	const [ panoIdx, setPanoIdx ] = useState(0);
 
-	useEffect(() => {
+	const findBestPano = useCallback(() => {
 		let closestDiff = Infinity;
-		let closestPano = undefined;
+		let closestPano = 0;
 		for (let i = 0; i < panos.length; i++) {
 			const d = panos[i].Jo || panos[i].Ko;
 			const diff = Math.abs(d - props.date);
@@ -19,9 +21,15 @@ const Panorama = props => {
 			closestPano = i;
 		}
 		setPanoIdx(closestPano);
-	}, [panos, props])
+		setPano(panos[closestPano]?.pano);
+	}, [panos, props]);
 
-	const center = { lat: props.address.Latitude, lng: props.address.Longitude };
+	useEffect(() => {
+		findBestPano();
+		if (props.address.Latitude !== center.lat || props.address.Longitude !== center.lng) {
+			setCenter({ lat: props.address.Latitude, lng: props.address.Longitude });
+		}
+	}, [center, findBestPano, props]);
 
 	const onPanorama = panorama => {
 		panorama.addListener('links_changed', () => {
@@ -41,7 +49,6 @@ const Panorama = props => {
 			if (!data) return;
 			if (status !== 'OK') return;
 			setPanos(data.time);
-			setPanoIdx(data.time.length - 1);
 		});
 	}
 
@@ -54,7 +61,7 @@ const Panorama = props => {
 					disableDefaultUI: true,
 					imageDateControl: true,
 				}}
-				pano={panos[panoIdx]?.pano}
+				pano={pano}
 				position={center}
 				visible={true}
 				onLoad={onPanorama}
