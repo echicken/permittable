@@ -16,25 +16,8 @@ const PermitRow = props => {
 	)
 }
 
-const Permit = () => {
-
-	const [ permit, setPermit ] = useState(null);
-	const [ address, setAddress ] = useState(null);
-	const { permitNumber, permitRevision } = useParams();
-	const location = useLocation();
-
-	if (!permit) {
-		const od = d => {
-			setPermit(d);
-			setAddress(d.Address);
-		}
-		return <Loader path={`/api/permit/${permitNumber}/${permitRevision}`} data={location.state?.permit || permit} onData={od} />;
-	}
-
-	if (!address) {
-		return <Loader path={`/api/address/by-id/${permit.AddressGeoID}`} data={location.state?.address || address} onData={setAddress} />
-	}
-
+const PermitContainer = props => {
+	const { address, permit } = props;
 	return(
 		<Container>
 			<Row>
@@ -57,7 +40,22 @@ const Permit = () => {
 			<PermitRow label="Dwellings Lost" data={permit.DwellingsLost} />
 			<PermitRow label="Estimated Cost" data={permit.EstimatedCost.toLocaleString('en-CA', { style: 'currency', currency: 'CAD' })} />
 		</Container>
-	);
+	);	
+}
+
+const Permit = () => {
+
+	const [ permit, setPermit ] = useState(null);
+	const [ address, setAddress ] = useState(null);
+	const { permitNumber, permitRevision } = useParams();
+	const location = useLocation();
+
+	return (<>
+		<Loader path={`/api/permit/${permitNumber}/${permitRevision}`} data={location.state?.permit} onData={setPermit} />
+		{permit && <Loader path={`/api/address/by-id/${permit.AddressGeoID}`} data={location.state?.address} onData={setAddress} /> }
+		{address && <PermitContainer permit={permit} address={address} />}
+	</>);
+
 }
 
 export default Permit;

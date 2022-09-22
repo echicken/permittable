@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GoogleMap, LoadScript } from '@react-google-maps/api';
+import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
 
 const Map = props => {
 
@@ -23,15 +23,19 @@ const Map = props => {
 		return;
 	}
 
+	const center = props.center || { lat: props.address.Latitude, lng: props.address.Longitude };
+
 	return (
 		<LoadScript googleMapsApiKey={key}>
 			<GoogleMap
 				mapContainerStyle={{ width: '100%', height: '400px' }}
-				center={props.center}
+				center={center}
 				options={props.options}
 				onLoad={props.onLoad}
-				children={props.children}
-			/>
+			>
+				<Marker position={center} />
+				{props.children}
+			</GoogleMap>
 		</LoadScript>
 	);
 

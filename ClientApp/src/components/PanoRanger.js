@@ -3,11 +3,13 @@ import { Container, Row, Col, Input } from 'reactstrap';
 
 const PanoRanger = props => {
 	if (!props.panos || props.panos.length < 2) return;
+	const fd = (props.panos[0].Jo || props.panos[0].Ko)?.getFullYear();
+	const ld = (props.panos[props.panos.length - 1].Jo || props.panos[props.panos.length - 1].Ko)?.getFullYear();
 	return (
 		<Container>
 			<Row>
 				<Col className="col-1">
-					{props.panos[0].Jo.getFullYear()}
+					{fd}
 				</Col>
 				<Col className="col-10">
 					<Input
@@ -21,7 +23,7 @@ const PanoRanger = props => {
 					/>
 				</Col>
 				<Col className="col-1 text-end">
-					{props.panos[props.panos.length - 1].Jo.getFullYear()}
+					{ld}
 				</Col>
 			</Row>
 		</Container>

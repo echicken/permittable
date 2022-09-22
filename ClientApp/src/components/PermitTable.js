@@ -31,10 +31,17 @@ const PermitList = props => {
 			/>
 		);
 	});
-	return <>{list}</>;
+	return (
+		<tbody>
+			{list}
+		</tbody>
+	);
 }
 
 const PermitTable = props => {
+
+	if (!props.permits.length) return <h2>No permits on file for {props.address.Text}</h2>;
+
 	return (<>
 		<h2>Permits for {props.address.Text}</h2>
 		<Table hover responsive>
@@ -48,11 +55,10 @@ const PermitTable = props => {
 					<th>Description <Sorter data={props.permits} sortBy="ShortDescription" setter={props.setPermits} /></th>
 				</tr>
 			</thead>
-			<tbody>
-				<PermitList data={props.permits} address={props.address} onPermitHover={props.onPermitHover} />
-			</tbody>
+			<PermitList data={props.permits} address={props.address} onPermitHover={props.onPermitHover} />
 		</Table>
 	</>);
+
 }
 
 export default PermitTable;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Loader from './Loader';
 
 const PermitLink = props => {
 	return (
@@ -12,25 +13,8 @@ const PermitLink = props => {
 const Stats = () => {
 
 	const [ stats, setStats ] = useState(null);
-	const [ loadingStats, setLoadingStats ] = useState(false);
 
-	const fetchStats = async () => {
-		setLoadingStats(true);
-		try {
-			const response = await fetch('/api/stats');
-			const data = await response.json();
-			setStats(data);
-			setLoadingStats(false);
-			console.debug(data);
-		} catch (err) {
-			console.error('Error loading stats', err);
-		}
-	}
-
-	if (!stats) {
-		if (!loadingStats) fetchStats();
-		return;
-	}
+	if (!stats) return <Loader path='/api/stats' data={stats} onData={setStats} />;
 
 	return (<>
 		There are <strong>{stats.PermitCount}</strong> building permits in the database.
@@ -61,7 +45,6 @@ const Stats = () => {
 }
 
 const About = () => {
-
 	return (<>
 		<strong>permittable</strong> allows you to search building permits from the City of Toronto's <a href="https://open.toronto.ca/dataset/building-permits-cleared-permits-prior-years/">Open Data Catalogue</a>.
 		<p />
@@ -69,7 +52,6 @@ const About = () => {
 		<p />
 		<Stats />
 	</>);
-
 }
 
 export default About;
