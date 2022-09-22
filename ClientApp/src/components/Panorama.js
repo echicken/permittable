@@ -6,7 +6,6 @@ import PanoRanger from './PanoRanger';
 const Panorama = props => {
 
 	const [ center, setCenter ] = useState({ lat: 0, lng: 0 });
-	const [ pano, setPano ] = useState();
 	const [ panos, setPanos ] = useState([]);
 	const [ panoIdx, setPanoIdx ] = useState(0);
 
@@ -21,7 +20,6 @@ const Panorama = props => {
 			closestPano = i;
 		}
 		setPanoIdx(closestPano);
-		setPano(panos[closestPano]?.pano);
 	}, [panos, props]);
 
 	useEffect(() => {
@@ -61,7 +59,7 @@ const Panorama = props => {
 					disableDefaultUI: true,
 					imageDateControl: true,
 				}}
-				pano={pano}
+				pano={panos[panoIdx]?.pano}
 				position={center}
 				visible={true}
 				onLoad={onPanorama}
