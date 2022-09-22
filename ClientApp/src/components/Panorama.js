@@ -11,7 +11,7 @@ const Panorama = props => {
 
 	const findBestPano = useCallback(() => {
 		let closestDiff = Infinity;
-		let closestPano = 0;
+		let closestPano = panos.length - 1;
 		for (let i = 0; i < panos.length; i++) {
 			const d = panos[i].Jo || panos[i].Ko;
 			const diff = Math.abs(d - props.date);
