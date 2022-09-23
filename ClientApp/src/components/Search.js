@@ -22,7 +22,7 @@ const Search = props => {
         return (<Marker
             key={address.GeoID}
             position={{lat: address.Latitude, lng: address.Longitude}}
-            onClick={() => navigate(`/address/${address.GeoID}`)}
+            onClick={() => navigate(`/view-address/${address.GeoID}`, { state: { address: address }})}
             animation={active ? 1 : 0}
             zIndex={active ? -1 : undefined}
         />);
